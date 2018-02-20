@@ -63,25 +63,31 @@ class GooglePlayMusicPlayerSkill(MycroftSkill):
             self.speak_dialog("googleplay.play")
             #print('yes')
 
-	    def runplay(bus):
+	    def runplay():
+                 bus = dbus.SessionBus()
         	 remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2")
         	 remote_object.Play(dbus_interface = "org.mpris.MediaPlayer2.Player")	
 	    
             
         
-            def runprocandplay():
+            def runproc():
            	#cmdstring = "googleplay %s %s %s" % ('-p' '-k' '0')
            	#os.system(cmdstring)
            	subprocess.call([self.playerName])
-           	bus = dbus.SessionBus()
-           	remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2")
-           	remote_object.Play(dbus_interface = "org.mpris.MediaPlayer2.Player")
-   
-            bus = dbus.SessionBus()
-            if bus.request_name("org.mpris.MediaPlayer2."+self.playerName):
-                runplay(bus)
+  
+            isRunning = False 
+
+            for proc in psutil.process_iter():
+                pinfo = proc.as_dict(attrs=['pid', 'name'])    
+                if pinfo['name'] == "Google Play Music Desktop Player":
+                    isRunning = True
+
+            if isRunning:
+                runplay()
             else:
-                runprocandplay()
+                runproc()
+                runplay()
+
 
     def handle_internals_googleplay_stop_skill_intent(self, message):        
         bus = dbus.SessionBus()
