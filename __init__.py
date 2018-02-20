@@ -10,16 +10,16 @@ from mycroft.skills.core import MycroftSkill
 from mycroft.util.log import getLogger
 import subprocess
 
-__author__ = 'hersche'
+__author__ = 'roboro'
 
 
 LOGGER = getLogger(__name__)
 
-class ClementineMusicPlayerSkill(MycroftSkill):
+class GooglePlayMusicPlayerSkill(MycroftSkill):
 
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
-        super(ClementineMusicPlayerSkill, self).__init__(name="ClementineMusicPlayerSkill")
+        super(GooglePlayMusicPlayerSkill, self).__init__(name="GooglePlayMusicPlayerSkill")
         
     # This method loads the files needed for the skill's functioning, and
     # creates and registers each intent that the skill uses
@@ -27,81 +27,77 @@ class ClementineMusicPlayerSkill(MycroftSkill):
         self.load_data_files(dirname(__file__))
         
         # set the downer variable to your music-player is maybe enough for make it working
-        self.playerName="clementine"
+        self.playerName="google-play-music-desktop-player"
         
-        internals_clementine_play_skill_intent = IntentBuilder("ClementinePlayKeywordIntent").\
-            require("ClementinePlayKeyword").build()
-        self.register_intent(internals_clementine_play_skill_intent, self.handle_internals_clementine_play_skill_intent)
+        internals_googleplay_play_skill_intent = IntentBuilder("GooglePlayPlayKeywordIntent").\
+            require("GooglePlayPlayKeyword").build()
+        self.register_intent(internals_googleplay_play_skill_intent, self.handle_internals_googleplay_play_skill_intent)
 
-        internals_clementine_jump_forward_skill_intent = IntentBuilder("ClementineJumpForwardKeywordIntent").\
-            require("ClementineJumpKeyword").require("nrOfSongs").require("ClementineJumpForwardKeyword").build()
-        self.register_intent(internals_clementine_jump_forward_skill_intent, self.handle_internals_clementine_jumpForward_skill_intent)
+        internals_googleplay_jump_forward_skill_intent = IntentBuilder("GooglePlayJumpForwardKeywordIntent").\
+            require("GooglePlayJumpKeyword").require("nrOfSongs").require("GooglePlayJumpForwardKeyword").build()
+        self.register_intent(internals_googleplay_jump_forward_skill_intent, self.handle_internals_googleplay_jumpForward_skill_intent)
 
-        internals_clementine_jump_backward_skill_intent = IntentBuilder("ClementineJumpBackwardKeywordIntent").\
-            require("ClementineJumpKeyword").require("nrOfSongs").require("ClementineJumpBackwardKeyword").build()
-        self.register_intent(internals_clementine_jump_backward_skill_intent, self.handle_internals_clementine_jumpBackward_skill_intent)
+        internals_googleplay_jump_backward_skill_intent = IntentBuilder("GooglePlayJumpBackwardKeywordIntent").\
+            require("GooglePlayJumpKeyword").require("nrOfSongs").require("GooglePlayJumpBackwardKeyword").build()
+        self.register_intent(internals_googleplay_jump_backward_skill_intent, self.handle_internals_googleplay_jumpBackward_skill_intent)
                 
-        internals_clementine_stop_skill_intent = IntentBuilder("ClementineStopKeywordIntent").\
-            require("ClementineStopKeyword").build()
-        self.register_intent(internals_clementine_stop_skill_intent, self.handle_internals_clementine_stop_skill_intent)
+        internals_googleplay_stop_skill_intent = IntentBuilder("GooglePlayStopKeywordIntent").\
+            require("GooglePlayStopKeyword").build()
+        self.register_intent(internals_googleplay_stop_skill_intent, self.handle_internals_googleplay_stop_skill_intent)
         
-        internals_clementine_next_skill_intent = IntentBuilder("ClementineNextKeywordIntent").\
-            require("ClementineNextKeyword").build()
-        self.register_intent(internals_clementine_next_skill_intent, self.handle_internals_clementine_next_skill_intent)
+        internals_googleplay_next_skill_intent = IntentBuilder("GooglePlayNextKeywordIntent").\
+            require("GooglePlayNextKeyword").build()
+        self.register_intent(internals_googleplay_next_skill_intent, self.handle_internals_googleplay_next_skill_intent)
 
-        internals_clementine_previous_skill_intent = IntentBuilder("ClementinePreviousKeywordIntent").\
-            require("ClementinePreviousKeyword").build()
-        self.register_intent(internals_clementine_previous_skill_intent, self.handle_internals_clementine_previous_skill_intent)
+        internals_googleplay_previous_skill_intent = IntentBuilder("GooglePlayPreviousKeywordIntent").\
+            require("GooglePlayPreviousKeyword").build()
+        self.register_intent(internals_googleplay_previous_skill_intent, self.handle_internals_googleplay_previous_skill_intent)
         
-        internals_clementine_pause_skill_intent = IntentBuilder("clementinePauseKeywordIntent").\
-            require("clementinePauseKeyword").build()
-        self.register_intent(internals_clementine_pause_skill_intent, self.handle_internals_clementine_pause_skill_intent)
+        internals_googleplay_pause_skill_intent = IntentBuilder("googleplayPauseKeywordIntent").\
+            require("googleplayPauseKeyword").build()
+        self.register_intent(internals_googleplay_pause_skill_intent, self.handle_internals_googleplay_pause_skill_intent)
 
 
-    def handle_internals_clementine_play_skill_intent(self, message):    
+    def handle_internals_googleplay_play_skill_intent(self, message):    
 	
-        clementineRunning = False   
-
-        for proc in psutil.process_iter():
-            pinfo = proc.as_dict(attrs=['pid', 'name'])    
-            if pinfo['name'] == self.playerName:
-                clementineRunning = True
-    
-        if clementineRunning:
-            self.speak_dialog("clementine.play")
+            self.speak_dialog("googleplay.play")
             #print('yes')
 
-	    def runplay():
-       		 bus = dbus.SessionBus()
+	    def runplay(bus):
         	 remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2")
         	 remote_object.Play(dbus_interface = "org.mpris.MediaPlayer2.Player")	
-	    runplay()
+	    
+            
         
-	else:
-       	   def runprocandplay():
-           	#cmdstring = "clementine %s %s %s" % ('-p' '-k' '0')
+            def runprocandplay():
+           	#cmdstring = "googleplay %s %s %s" % ('-p' '-k' '0')
            	#os.system(cmdstring)
            	subprocess.call([self.playerName])
            	bus = dbus.SessionBus()
            	remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2")
            	remote_object.Play(dbus_interface = "org.mpris.MediaPlayer2.Player")
-           runprocandplay()
    
-    def handle_internals_clementine_stop_skill_intent(self, message):        
+            bus = dbus.SessionBus()
+            if bus.request_name("org.mpris.MediaPlayer2."+self.playerName):
+                runplay(bus)
+            else:
+                runprocandplay()
+
+    def handle_internals_googleplay_stop_skill_intent(self, message):        
         bus = dbus.SessionBus()
         remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2") 
         remote_object.Stop(dbus_interface = "org.mpris.MediaPlayer2.Player")
         
-        self.speak_dialog("clementine.stop")
+        self.speak_dialog("googleplay.stop")
     
-    def handle_internals_clementine_next_skill_intent(self, message):
+    def handle_internals_googleplay_next_skill_intent(self, message):
         bus = dbus.SessionBus()
         remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2") 
         remote_object.Next(dbus_interface = "org.mpris.MediaPlayer2.Player")
         
-        self.speak_dialog("clementine.next")
+        self.speak_dialog("googleplay.next")
         
-    def handle_internals_clementine_jumpForward_skill_intent(self, message):
+    def handle_internals_googleplay_jumpForward_skill_intent(self, message):
         bus = dbus.SessionBus()
         remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2")
         properties_manager = dbus.Interface(remote_object, 'org.freedesktop.DBus.Properties')
@@ -117,7 +113,7 @@ class ClementineMusicPlayerSkill(MycroftSkill):
         except ValueError:
             self.speak("sorry, was not able to parse the amount of songs i should go forward. Your wrong nr was: "+nrOfSongs)
     
-    def handle_internals_clementine_jumpBackward_skill_intent(self, message):
+    def handle_internals_googleplay_jumpBackward_skill_intent(self, message):
         bus = dbus.SessionBus()
         remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2")
         properties_manager = dbus.Interface(remote_object, 'org.freedesktop.DBus.Properties')
@@ -134,20 +130,20 @@ class ClementineMusicPlayerSkill(MycroftSkill):
             self.speak("sorry, was not able to parse the amount of songs i should go backward. Your wrong nr was: "+nrOfSongs)
 
         
-    def handle_internals_clementine_previous_skill_intent(self, message):
+    def handle_internals_googleplay_previous_skill_intent(self, message):
         bus = dbus.SessionBus()
         remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2") 
         remote_object.Previous(dbus_interface = "org.mpris.MediaPlayer2.Player")
         
-        self.speak_dialog("clementine.previous")     
+        self.speak_dialog("googleplay.previous")     
 
-    def handle_internals_clementine_pause_skill_intent(self, message):
+    def handle_internals_googleplay_pause_skill_intent(self, message):
         
         bus = dbus.SessionBus()
         remote_object = bus.get_object("org.mpris.MediaPlayer2."+self.playerName,"/org/mpris/MediaPlayer2") 
-        remote_object.Pause(dbus_interface = "org.mpris.MediaPlayer2.Player")
+        remote_object.PlayPause(dbus_interface = "org.mpris.MediaPlayer2.Player")
         
-        self.speak_dialog("clementine.pause")     
+        self.speak_dialog("googleplay.pause")     
         
     def stop(self):
         pass
@@ -155,4 +151,4 @@ class ClementineMusicPlayerSkill(MycroftSkill):
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
 def create_skill():
-    return ClementineMusicPlayerSkill()
+    return GooglePlayMusicPlayerSkill()

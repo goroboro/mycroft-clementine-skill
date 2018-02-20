@@ -1,33 +1,32 @@
-# mycroft-clementine-player-plasma-skill
-This skill integrates clementine Music Player with Mycroft which enables users to Play Local Music.
+# mycroft-google-play-desktop-player-skill
+This skill integrates the Linux version of the Google Play Music Desktop Player with Mycroft which enables users to Play Local Music.
 
-It is forked by the mycroft-amarok-player-plasma-skill and works in a similiar way.
+See: https://www.googleplaymusicdesktopplayer.com/
 
-It could be that the plugin make conflicts with the amarok-one cause of same commands, so you propaply have to deceide what skill you want to need.
+It is forked from the mycroft-clementine-player-plasma-skill and works in a similiar way.
 
-The clementine-project is also for exploring the mechanisms and libs of mycroft personaly, so i also want to extend it. Ideas are welcome.
+It could be that the plugin make conflicts with the amarok and clementine versions of the same skill because of the same commands, so you propaply have to decide what skill you need or you may need to modify the vocab for this skill.
+
 
 #### Installation of skill:
 * Download or Clone Git
 * Create /opt/mycroft/skills folder if it does not exist
-* Extract Downloaded Skill into a folder. "mycroft-clementine-player-plasma-skill". (Clone does not require this step)
+* Extract Downloaded Skill into a folder. "mycroft-google-play-desktop-player-skill". (Clone does not require this step)
 * Copy the mycroft-internals-plasma-skill folder to /opt/mycroft/skills/ folder
 
 #### Installation of requirements:
 ##### Fedora: 
 - sudo dnf install dbus-python
-- sudo dnf install python-psutil
 - From terminal: cp -R /usr/lib64/python2.7/site-packages/dbus* /home/$USER/.virtualenvs/mycroft/lib/python2.7/site-packages/
 - From terminal: cp /usr/lib64/python2.7/site-packages/_dbus* /home/$USER/.virtualenvs/mycroft/lib/python2.7/site-packages/
 
 ##### Kubuntu / KDE Neon: 
-- sudo apt install python-psutil
 - sudo apt install python-dbus
 - From terminal: cp -R /usr/lib/python2.7/dist-packages/dbus* /home/$USER/.virtualenvs/mycroft/lib/python2.7/site-packages/
 - From terminal: cp /usr/lib/python2.7/dist-packages/_dbus* /home/$USER/.virtualenvs/mycroft/lib/python2.7/site-packages/
 
 ##### For other distributions:
-- Python Dbus and Python Psutil package is required and copying the Python Dbus folder and lib from your system python install over to /home/$USER/.virtualenvs/mycroft/lib/python2.7/site-packages/.
+- Python Dbus package is required and copying the Python Dbus folder and lib from your system python install over to /home/$USER/.virtualenvs/mycroft/lib/python2.7/site-packages/.
 
 ##### How To Use: 
 ###### Play Music/Song
